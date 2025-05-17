@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block page_title %}
+    Anasayfa
+{% endblock page_title %}
+
+{% block cssFiles %}
+    <link rel="stylesheet" href="{% static 'courses/css/style.css' %}">
+{% endblock cssFiles %}
+
+
+{% block content %}
+    <div class="container mt-3">
+        <h1>Ana Sayfaaa</h1>
+        <div class="row">
+            <!--menü-->
+            <div class="col-3">
+                {% include "courses/partials/_categories.html" %}
+            </div>
+            <!--content-->
+            <div class="col-9">
+                {% if courses|length == 0 %}
+                    <div class="alert alert-warning">Kurs Bulunamadı.</div>
+                {% endif %}
+                {% for course in courses %}
+                    {% include "courses/partials/_course.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block js_files %}
+    <script src="{% static "courses/js/script.js" %}"></script>
+{% endblock js_files %}
