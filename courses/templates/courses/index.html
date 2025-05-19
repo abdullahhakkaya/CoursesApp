@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_title %}
-    Anasayfa
+    Kurslar
 {% endblock page_title %}
 
 {% block cssFiles %}
@@ -12,7 +12,6 @@
 
 {% block content %}
     <div class="container mt-3">
-        <h1>Ana Sayfaaa</h1>
         <div class="row">
             <!--menü-->
             <div class="col-3">
@@ -20,12 +19,13 @@
             </div>
             <!--content-->
             <div class="col-9">
-                {% if courses|length == 0 %}
+                {% if page_obj.object_list|length == 0 %}
                     <div class="alert alert-warning">Kurs Bulunamadı.</div>
                 {% endif %}
-                {% for course in courses %}
+                {% for course in page_obj.object_list %}
                     {% include "courses/partials/_course.html" %}
-                {% endfor %}
+                {% endfor %} 
+                {% include "courses/partials/_pagination.html" %}
             </div>
         </div>
     </div>

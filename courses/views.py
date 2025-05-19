@@ -1,8 +1,8 @@
 from datetime import date, datetime
-from django.http import Http404, HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from .models import Course, Category
+from django.core.paginator import Paginator
 
 data = {
     "programlama":"programlama kurs listesi",
@@ -49,12 +49,16 @@ db = {
 # Create your views here.
 
 def index(request):
-    courses = Course.objects.filter(isActive=1)
+    courses = Course.objects.filter(isActive=1).order_by("date")
     categories = Category.objects.all()
 
+    paginator = Paginator(courses, 4)
+    page = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page)
+
     return render(request, 'courses/index.html', {
-        'categories' : categories,
-        'courses' : courses
+        'categories': categories,
+        'page_obj': page_obj
     })
 
 def details(request, _slug):
@@ -66,10 +70,15 @@ def details(request, _slug):
 
 
 def getCoursesByCategory(request, _slug):
-    courses = Course.objects.filter(category__slug=_slug, isActive=True)
+    courses = Course.objects.filter(categories__slug=_slug, isActive=True).order_by("date")
     categories = Category.objects.all()
+
+    paginator = Paginator(courses, 2)
+    page = request.GET.get('page',1)
+    page_obj = paginator.get_page(page)
+
     return render(request, 'courses/index.html', {
         'categories' : categories,
-        'courses' : courses,
+        'page_obj' : page_obj,
         'selectedCategory' : _slug
     })
